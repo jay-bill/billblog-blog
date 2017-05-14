@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jaybill.billblog.dao.BlogMapper" >
+  <resultMap id="BaseResultMap" type="com.jaybill.billblog.pojo.Blog" >
+    <id column="BLOG_ID" property="blogId" jdbcType="BIGINT" />
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    <result column="BLOG_TITLE" property="blogTitle" jdbcType="VARCHAR" />
+    <result column="BLOG_DATE" property="blogDate" jdbcType="TIMESTAMP" />
+    <result column="LIKE_SUM" property="likeSum" jdbcType="INTEGER" />
+    <result column="COMMENT_SUM" property="commentSum" jdbcType="INTEGER" />
+    <result column="FORWARD_SUM" property="forwardSum" jdbcType="INTEGER" />
+    <result column="COLLECT_SUM" property="collectSum" jdbcType="INTEGER" />
+    <result column="BLOG_CONTENT" property="blogContent" jdbcType="LONGVARCHAR" />
+    <result column="BLOG_IMAGE" property="blogImage" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <!-- 随机选择sum篇博客 -->
+  <select id="selectByRandom" parameterType="int" resultMap="BaseResultMap">
+  	select 
+  	BLOG_ID,USER_ID,BLOG_TITLE,BLOG_DATE,LIKE_SUM,COMMENT_SUM,FORWARD_SUM,COLLECT_SUM,BLOG_CONTENT,BLOG_IMAGE 
+  	from blog where BLOG_ID>=
+  	(rand()*((select MAX(BLOG_ID) from blog)-(select MIN(BLOG_ID) from blog))+(select MIN(BLOG_ID) from blog))
+  	limit 1
+  </select>
+</mapper>
