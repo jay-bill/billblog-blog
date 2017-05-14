@@ -1,15 +1,21 @@
 package com.jaybill.billblog.pojo;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
-public class Blog {
-    private Long blogId;
+public class Blog implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8970388952330911902L;
+
+	private Long blogId;
 
     private Long userId;
 
     private String blogTitle;
 
-    private Date blogDate;
+    private Timestamp blogDate;
 
     private Integer likeSum;
 
@@ -43,11 +49,11 @@ public class Blog {
         this.blogTitle = blogTitle == null ? null : blogTitle.trim();
     }
 
-    public Date getBlogDate() {
+    public Timestamp getBlogDate() {
         return blogDate;
     }
 
-    public void setBlogDate(Date blogDate) {
+    public void setBlogDate(Timestamp blogDate) {
         this.blogDate = blogDate;
     }
 
@@ -85,7 +91,6 @@ public class Blog {
     
     private String blogContent;
 
-    private String blogImage;
 
     public String getBlogContent() {
         return blogContent;
@@ -95,11 +100,28 @@ public class Blog {
         this.blogContent = blogContent == null ? null : blogContent.trim();
     }
 
-    public String getBlogImage() {
-        return blogImage;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((blogId == null) ? 0 : blogId.hashCode());
+		return result;
+	}
 
-    public void setBlogImage(String blogImage) {
-        this.blogImage = blogImage == null ? null : blogImage.trim();
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Blog other = (Blog) obj;
+		if (blogId == null) {
+			if (other.blogId != null)
+				return false;
+		} else if (!blogId.equals(other.blogId))
+			return false;
+		return true;
+	}
 }

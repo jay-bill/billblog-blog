@@ -58,27 +58,14 @@
          </ul>
       </section>
     </aside>
-    <div class="blogitem">
-    	<c:set var="count" value="0"></c:set>
-    	<c:forEach var="blog" items="${blog_list}">
-    		  <article>
-		        <h2 class="title"><a href="#">${blog.blogTitle}</a></h2>
-		        <ul class="text" style="height:600px;overflow:hidden;">
-		          ${blog.blogContent}
-		        </ul>
-		        <div class="textfoot">
-		          <a href="#">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
-		        </div>
-		      </article>
-		      <c:set var="count" value="${count+1}"></c:set> 
-    	</c:forEach>
-     	<c:if test="${count>0}">
-  		      <div class="pages"><span>1</span><a href="#" hidefocus="">2</a><a href="#" hidefocus="">3</a><a href="#" class="next">下一页&gt;&gt;</a></div>
-     	</c:if>    	
+    <div class="blogitem" >
+  		 <article>
+        <h2 class="title"><a href="#">${oneblog.blogTitle}</a></h2>
+        <ul class="text">
+          ${oneblog.blogContent}
+        </ul>
+      </article>
     </div>
-    <c:if test="${count eq 0}">
-     	<p style="background:#E8E5DD;text-align:center;">这家伙很懒，没有留下任何博客</p>
-    </c:if>
  </div>
 <footer>
    <div class="footavatar">

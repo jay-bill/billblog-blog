@@ -15,6 +15,7 @@ public class BlogServiceImf implements BlogService {
 
 	@Autowired
 	BlogMapper blogMapper;
+		
 	@Override
 	public List<Blog> getRandomBlogs(int sum) {
 		List<Blog> list = new ArrayList<Blog>();
@@ -22,9 +23,22 @@ public class BlogServiceImf implements BlogService {
 			Blog b = blogMapper.selectByRandom(sum);
 			if(b==null)
 				break;
-			list.add(b);
+			if(!list.contains(b)){
+				list.add(b);
+			}
 		}
 		return list;
+	}
+	
+	@Override
+	public Blog getOneBlog(long blogId) {
+		Blog blog = blogMapper.selectOneById(blogId);
+		return blog;
+	}
+
+	@Override
+	public void addBlog(Blog blog) {
+		blogMapper.insertOneBlog(blog);
 	}
 
 }

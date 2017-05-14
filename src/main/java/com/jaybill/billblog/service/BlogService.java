@@ -17,7 +17,21 @@ public interface BlogService {
 	 * @return
 	 */
 	List<Blog> getRandomBlogs(int sum);
+
+	/**
+	 * 获取blog的详细信息
+	 * @param blogId
+	 * @return
+	 */
+	Blog getOneBlog(long blogId);
+
+	/**
+	 * 新增博客
+	 * @param blog
+	 */
+	void addBlog(Blog blog);
 	
 //	List<Blog> getUserBlogs(long userId);
+	
 }
 

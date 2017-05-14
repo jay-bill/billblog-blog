@@ -11,14 +11,24 @@
     <result column="FORWARD_SUM" property="forwardSum" jdbcType="INTEGER" />
     <result column="COLLECT_SUM" property="collectSum" jdbcType="INTEGER" />
     <result column="BLOG_CONTENT" property="blogContent" jdbcType="LONGVARCHAR" />
-    <result column="BLOG_IMAGE" property="blogImage" jdbcType="LONGVARCHAR" />
   </resultMap>
   <!-- 随机选择sum篇博客 -->
   <select id="selectByRandom" parameterType="int" resultMap="BaseResultMap">
   	select 
-  	BLOG_ID,USER_ID,BLOG_TITLE,BLOG_DATE,LIKE_SUM,COMMENT_SUM,FORWARD_SUM,COLLECT_SUM,BLOG_CONTENT,BLOG_IMAGE 
+  	BLOG_ID,USER_ID,BLOG_TITLE,BLOG_DATE,LIKE_SUM,COMMENT_SUM,FORWARD_SUM,COLLECT_SUM,BLOG_CONTENT 
   	from blog where BLOG_ID>=
   	(rand()*((select MAX(BLOG_ID) from blog)-(select MIN(BLOG_ID) from blog))+(select MIN(BLOG_ID) from blog))
   	limit 1
   </select>
+  
+  <!-- 获取一条 -->
+  <select id="selectOneById" parameterType="long" resultMap="BaseResultMap">
+  	select BLOG_ID,USER_ID,BLOG_TITLE,BLOG_DATE,LIKE_SUM,COMMENT_SUM,FORWARD_SUM,COLLECT_SUM,BLOG_CONTENT 
+  	from blog where BLOG_ID=#{blogId}
+  </select>
+  
+  <!-- 新增一条 -->
+  <insert id="insertOneBlog" parameterType="com.jaybill.billblog.pojo.Blog">
+  	insert into blog (USER_ID,BLOG_TITLE,BLOG_DATE,BLOG_CONTENT) values (#{userId},#{blogTitle},#{blogDate},#{blogContent});
+  </insert>
 </mapper>

@@ -1,4 +1,4 @@
-package com.jaybill.billblog.utils;
+package com.jaybill.billblog.utils.image;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
