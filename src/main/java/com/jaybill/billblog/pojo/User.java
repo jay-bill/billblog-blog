@@ -1,8 +1,12 @@
 package com.jaybill.billblog.pojo;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class User {
+public class User implements Serializable{
+	
+	private static final long serialVersionUID = -9155715150920452077L;
+	
     private Long userId;
 
     private String userAccount;

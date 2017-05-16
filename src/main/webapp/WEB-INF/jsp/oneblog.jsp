@@ -32,16 +32,16 @@
  </header>
  <div class="mainContent">
     <aside>
-      <div class="avatar">
-        <a href="#" style=" background: url(${request.contextPath }/resource/image/photo.jpg) no-repeat; background-size: 160px 160px"><span>浴火社区</span></a>
+      <div class="avatar">      
+        <img alt="" src="http://localhost:8080${user_info.userHeadimage}" style="width:160px;height:160px;">
       </div>
       <section class="topspaceinfo">
-        <h1>浴火社区</h1>
-        <p>凤凰涅槃，浴火重生；受过磨难，才能展翅飞翔</p>
+        <h1>${user_info.userNickname}</h1>
+        <p>${all_info.userSignature}</p>
       </section>
       <div class="userinfo"> 
-        <p class="q-fans">用户：<a href="#">${user_sum}</a></p> 
-        <p class="btns"><a href="#" >给站长留言</a></p>   
+        <p class="q-fans">粉丝：<a href="#">${fans_sum}</a></p> 
+        <p class="btns"><a href="#" >留言</a></p>   
       </div>      
       <section class="taglist">
          <h2>社区标签</h2>

@@ -15,7 +15,7 @@ import com.github.tobato.fastdfs.service.FastFileStorageClient;
 @Component
 public class ImageUtil {
 	
-	@Autowired
+	@Autowired(required=false)
     private FastFileStorageClient storageClient;//fastdfs客户端
 	
 	public String uploadToFastDFS(String content){

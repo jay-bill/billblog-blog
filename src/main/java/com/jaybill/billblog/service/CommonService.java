@@ -12,7 +12,7 @@ public interface CommonService {
 	 * @return
 	 */
 	User getUserBaseInfo(String userAccount);
-	User getUserBaseInfo(long userId);
+	User getUserBaseInfoById(long userId);
 	/**
 	 * 获取用户的详细信息
 	 * @param userAccount

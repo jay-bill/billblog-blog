@@ -12,11 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.jaybill.billblog.config.Url;
 import com.jaybill.billblog.pojo.Blog;
+import com.jaybill.billblog.pojo.User;
 import com.jaybill.billblog.service.BlogService;
 import com.jaybill.billblog.service.CommonService;
+import com.jaybill.billblog.service.LoginService;
 import com.jaybill.billblog.utils.image.ImageUtil;
 import com.jaybill.billblog.utils.string.BlogHtmlStringUtil;
 
@@ -34,6 +35,8 @@ public class BlogController {
 	@Autowired
 	private CommonService common;
 	@Autowired
+	private LoginService login;
+	@Autowired(required=false)
 	private ImageUtil imUtil;
 	@Autowired
 	private BlogHtmlStringUtil blogUtil;
@@ -124,6 +127,20 @@ public class BlogController {
 		map.put("oneblog", blog);
 		//除移
 		request.getSession().removeAttribute("tmp_blog");
+		//获取博客作者的信息
+		long userId = blog.getUserId();
+		map.put("user_info", common.getUserBaseInfoById(userId));
+		map.put("all_info",common.getUserInfo(userId));
+		map.put("fans_sum", common.getFansSum(userId));
 		return "oneblog";
+	}
+	
+	@RequestMapping(value="signin",method=RequestMethod.POST)
+	public String login(String userAccount,String userPassword){		
+		User u = login.signIn(userAccount,userPassword);
+		if(u!=null)
+			return "redirect:showAllBlogs";
+		else
+			return "redirect:/login.html";
 	}
 }

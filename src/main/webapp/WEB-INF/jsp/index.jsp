@@ -67,7 +67,7 @@
 		          ${blog.blogContent}
 		        </ul>
 		        <div class="textfoot">
-		          <a href="#">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
+		          <a href="/showOneBlog?blogId=${blog.blogId}">阅读全文</a><a href="#">评论</a><a href="#">转载</a>
 		        </div>
 		      </article>
 		      <c:set var="count" value="${count+1}"></c:set> 

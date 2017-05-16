@@ -1,6 +1,11 @@
 package com.jaybill.billblog.pojo;
 
-public class Userinfo {
+import java.io.Serializable;
+
+public class Userinfo implements Serializable{
+	
+	private static final long serialVersionUID = -628088343022781787L;
+	
     private Long userId;
 
     private Byte userSex;
