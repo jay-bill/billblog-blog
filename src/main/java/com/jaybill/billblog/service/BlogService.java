@@ -32,6 +32,12 @@ public interface BlogService {
 	void addBlog(Blog blog);
 	
 //	List<Blog> getUserBlogs(long userId);
+	/**
+	 * 解析博客内容，解码博客里面的图片，上传到fastdfs，替换原有的图片路径
+	 * @param blog
+	 * @return
+	 */
+	String parseBlog(String content);
 	
 }
 

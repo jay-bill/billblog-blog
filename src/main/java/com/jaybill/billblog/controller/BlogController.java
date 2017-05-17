@@ -35,11 +35,7 @@ public class BlogController {
 	@Autowired
 	private CommonService common;
 	@Autowired
-	private LoginService login;
-	@Autowired(required=false)
-	private ImageUtil imUtil;
-	@Autowired
-	private BlogHtmlStringUtil blogUtil;
+	private LoginService login;	
 	/**
 	 * 随机选取博客
 	 * @param sum 默认10篇
@@ -84,22 +80,11 @@ public class BlogController {
 	 */
 	@RequestMapping(value="submitBlog",method=RequestMethod.POST)
 	public String submitBlog(Blog blog,HttpServletRequest request) throws IOException{	
-		//获取博客里面的图片
-		String content = blog.getBlogContent();
-		List<String> foundTags = blogUtil.parseContent(content, "<img>");
-		Iterator<String> it = foundTags.iterator();
-		while(it.hasNext()){
-			String img = it.next();
-			String storePath = imUtil.uploadToFastDFS(img);
-			String newImg = "<img src='"+storePath+"'/>";
-			content = blogUtil.replaceTagVal(content, img, newImg);
-		}	
+		//对博客内容进行解析
+		String content = blogService.parseBlog(blog.getBlogContent());
 		//构造blog对象
-		Blog newBlog = new Blog();
-		newBlog.setBlogContent(content);
-		newBlog.setBlogDate(new Timestamp(new Date().getTime()));
-		newBlog.setBlogTitle(blog.getBlogTitle());
-		newBlog.setUserId((long)9);
+		Blog newBlog = new Blog(blog.getBlogTitle(),new Timestamp(new Date().getTime()),
+				content,(long)9);
 		//插入数据库
 		blogService.addBlog(newBlog);
 		//共享到session

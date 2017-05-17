@@ -4,11 +4,18 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class Blog implements Serializable{
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = -8970388952330911902L;
-
+	
+	public Blog(){}
+	
+	public Blog(String blogTitle,Timestamp blogDate,String blogContent,Long userId){
+		this.blogTitle = blogTitle;
+		this.blogDate = blogDate;
+		this.blogContent = blogContent;
+		this.userId = userId;
+	}
+	
 	private Long blogId;
 
     private Long userId;
