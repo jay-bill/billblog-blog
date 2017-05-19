@@ -1,6 +1,10 @@
 package com.jaybill.billblog.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Iterator;
@@ -20,6 +24,11 @@ import com.jaybill.billblog.service.CommonService;
 import com.jaybill.billblog.service.LoginService;
 import com.jaybill.billblog.utils.image.ImageUtil;
 import com.jaybill.billblog.utils.string.BlogHtmlStringUtil;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * 博客控制器
@@ -98,10 +107,11 @@ public class BlogController {
 	 * @param map
 	 * @param request
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping(value="showOneBlog")
 	public String showOneBlog(long blogId,Map<String,Object> map
-			,HttpServletRequest request){
+			,HttpServletRequest request) throws IOException{
 		Object obj = request.getSession().getAttribute("tmp_blog");
 		Blog blog = null;
 		if(obj!=null){
@@ -114,10 +124,17 @@ public class BlogController {
 		request.getSession().removeAttribute("tmp_blog");
 		//获取博客作者的信息
 		long userId = blog.getUserId();
-		map.put("user_info", common.getUserBaseInfoById(userId));
-		map.put("all_info",common.getUserInfo(userId));
-		map.put("fans_sum", common.getFansSum(userId));
-		return "oneblog";
+//		map.put("user_info", common.getUserBaseInfoById(userId));
+//		map.put("all_info",common.getUserInfo(userId));
+//		map.put("fans_sum", common.getFansSum(userId));
+		//静态化
+		try {
+			blogService.staticBlog(map,request);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ""
+				+ "";
 	}
 	
 	@RequestMapping(value="signin",method=RequestMethod.POST)

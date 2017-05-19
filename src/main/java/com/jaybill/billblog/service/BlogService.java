@@ -1,8 +1,15 @@
 package com.jaybill.billblog.service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.jaybill.billblog.pojo.Blog;
+
+import freemarker.core.ParseException;
 
 /**
  * 博文服务
@@ -38,6 +45,8 @@ public interface BlogService {
 	 * @return
 	 */
 	String parseBlog(String content);
+
+	void staticBlog(Map<String, Object> map,HttpServletRequest request) throws Exception;
 	
 }
 

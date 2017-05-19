@@ -76,6 +76,11 @@
 		    <artifactId>fastdfs-client</artifactId>
 		    <version>1.25.2-RELEASE</version>
 		</dependency>
+		<!-- 使用freemaker -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
     </dependencies>
     <!-- 打包spring boot应用 -->
     <build>

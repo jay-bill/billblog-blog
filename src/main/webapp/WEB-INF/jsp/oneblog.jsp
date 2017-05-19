@@ -73,6 +73,7 @@
      <ul class="footinfo">
        <p class="fname"><a href="/dancesmile" >浴火社区</a>  </p>
        <p class="finfo">凤凰涅槃，浴火重生</p>
+       </ul>
    </div>
    <section class="visitor">
      <h2>最近访客</h2>
