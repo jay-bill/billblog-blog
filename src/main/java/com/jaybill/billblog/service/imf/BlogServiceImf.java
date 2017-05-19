@@ -2,6 +2,7 @@ package com.jaybill.billblog.service.imf;
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.jaybill.billblog.dao.BlogMapper;
 import com.jaybill.billblog.pojo.Blog;
 import com.jaybill.billblog.service.BlogService;
+import com.jaybill.billblog.utils.file.FileUtil;
 import com.jaybill.billblog.utils.image.ImageUtil;
 import com.jaybill.billblog.utils.string.BlogHtmlStringUtil;
 
@@ -41,6 +43,8 @@ public class BlogServiceImf implements BlogService{
 	BlogMapper blogMapper;
 	@Autowired
 	Configuration config;
+	@Autowired
+	FileUtil fileUtil;
 	//线程池
 	ExecutorService exe = null;
 	CompletionService<String> cps = null;
@@ -123,20 +127,22 @@ public class BlogServiceImf implements BlogService{
 	 * 页面静态化
 	 */
 	@Override
-	public void staticBlog(Map<String, Object> map,HttpServletRequest request) throws Exception {
+	public String staticBlog(Map<String, Object> map,HttpServletRequest request) throws Exception {
 		//静态化
 		config.setDefaultEncoding("UTF-8");//编码  
 		config.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 		Template temple=config.getTemplate("template.ftl");//获取模板  
-		Writer out = new OutputStreamWriter(new FileOutputStream(request.getServletContext().getRealPath("/")+"1.html"));//生成最终页面并写到文件  
+		StringWriter out = new StringWriter();//生成最终页面并写到文件  
 		try {  
 		    temple.process(map, out);//处理  
+		    byte [] bt = out.toString().getBytes();
+		    return fileUtil.upload(bt, "html");//上传
 		} catch (TemplateException e) {  
 		    e.printStackTrace();  
-		}finally  
-		{  
+		}finally{  
 		    out.close();  
-		}  
+		}
+		return null;  
 	}
 
 }

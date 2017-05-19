@@ -46,7 +46,14 @@ public interface BlogService {
 	 */
 	String parseBlog(String content);
 
-	void staticBlog(Map<String, Object> map,HttpServletRequest request) throws Exception;
+	/**
+	 * 页面静态化，并返回新路径
+	 * @param map
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	String staticBlog(Map<String, Object> map,HttpServletRequest request) throws Exception;
 	
 }
 

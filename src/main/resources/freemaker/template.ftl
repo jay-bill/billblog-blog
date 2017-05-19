@@ -8,6 +8,7 @@
 　　<meta http-equiv="keywords" content="keyword1,keyword2,keyword3"> 
 　　<meta http-equiv="description" content="This is my page"> 
 　　<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+   <link href="/resource/css/blog/styles.css" rel="stylesheet">
 </head> 
 　　<body>
 	<header>

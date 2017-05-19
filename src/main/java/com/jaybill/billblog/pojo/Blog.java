@@ -31,8 +31,18 @@ public class Blog implements Serializable{
     private Integer forwardSum;
 
     private Integer collectSum;
+    
+    private String blogHref;
 
-    public Long getBlogId() {
+    public String getBlogHref() {
+		return blogHref;
+	}
+
+	public void setBlogHref(String blogHref) {
+		this.blogHref = blogHref;
+	}
+
+	public Long getBlogId() {
         return blogId;
     }
 

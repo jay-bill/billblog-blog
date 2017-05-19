@@ -88,16 +88,28 @@ public class BlogController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value="submitBlog",method=RequestMethod.POST)
-	public String submitBlog(Blog blog,HttpServletRequest request) throws IOException{	
+	public String submitBlog(Blog blog,HttpServletRequest request,Map<String,Object> map) throws IOException{	
 		//对博客内容进行解析，并上传图片
 		String content = blogService.parseBlog(blog.getBlogContent());
 		//构造blog对象
 		Blog newBlog = new Blog(blog.getBlogTitle(),new Timestamp(new Date().getTime()),
-				content,(long)9);
+				content,(long)9);		
+		//静态化
+		map.put("oneblog", blog);
+		//静态化
+		try {
+			newBlog.setBlogHref(blogService.staticBlog(map,request));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//插入数据库
 		blogService.addBlog(newBlog);
 		//共享到session
 		request.getSession().setAttribute("tmp_blog", newBlog);
+		System.out.println(newBlog.getBlogHref());
+		if(newBlog.getBlogHref()!=null){
+			return "redirect:"+newBlog.getBlogHref();
+		}
 		return "redirect:showOneBlog?blogId=-1";
 	}
 	
