@@ -89,7 +89,7 @@ public class BlogController {
 	 */
 	@RequestMapping(value="submitBlog",method=RequestMethod.POST)
 	public String submitBlog(Blog blog,HttpServletRequest request) throws IOException{	
-		//对博客内容进行解析
+		//对博客内容进行解析，并上传图片
 		String content = blogService.parseBlog(blog.getBlogContent());
 		//构造blog对象
 		Blog newBlog = new Blog(blog.getBlogTitle(),new Timestamp(new Date().getTime()),
@@ -111,7 +111,7 @@ public class BlogController {
 	 */
 	@RequestMapping(value="showOneBlog")
 	public String showOneBlog(long blogId,Map<String,Object> map
-			,HttpServletRequest request) throws IOException{
+			,HttpServletRequest request){
 		Object obj = request.getSession().getAttribute("tmp_blog");
 		Blog blog = null;
 		if(obj!=null){
@@ -120,21 +120,25 @@ public class BlogController {
 			blog = blogService.getOneBlog(blogId);
 		}
 		map.put("oneblog", blog);
-		//除移
-		request.getSession().removeAttribute("tmp_blog");
-		//获取博客作者的信息
-		long userId = blog.getUserId();
-//		map.put("user_info", common.getUserBaseInfoById(userId));
-//		map.put("all_info",common.getUserInfo(userId));
-//		map.put("fans_sum", common.getFansSum(userId));
 		//静态化
 		try {
 			blogService.staticBlog(map,request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ""
-				+ "";
+		//除移
+		request.getSession().removeAttribute("tmp_blog");
+		//获取博客作者的信息
+		long userId = blog.getUserId();
+		//rpc
+		try{
+			map.put("user_info", common.getUserBaseInfoById(userId));
+			map.put("all_info",common.getUserInfo(userId));
+			map.put("fans_sum", common.getFansSum(userId));
+		}catch(Exception e){
+			e.printStackTrace();
+		}		
+		return "oneblog";
 	}
 	
 	@RequestMapping(value="signin",method=RequestMethod.POST)

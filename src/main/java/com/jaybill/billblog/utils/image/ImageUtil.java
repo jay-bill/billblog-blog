@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,26 +13,54 @@ import org.springframework.stereotype.Component;
 
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+/**
+ * 图片工具类
+ * @author jaybill
+ *
+ */
 @Component
-public class ImageUtil {
+public class ImageUtil implements Callable<String>{
 	
 	@Autowired(required=false)
     private FastFileStorageClient storageClient;//fastdfs客户端
 	
+	public FastFileStorageClient getStorageClient() {
+		return storageClient;
+	}
+	public void setStorageClient(FastFileStorageClient storageClient) {
+		this.storageClient = storageClient;
+	}
+	private String content;
+	//返回消息的消息头，也就是返回的路径头，用于区分线程结果
+	private String prefix;
+	public ImageUtil(){}
+	public ImageUtil(String content,String prefix){
+		this(content,prefix,null);
+	}
+	public ImageUtil(String content,String prefix,FastFileStorageClient storageClient){
+		this.content = content;
+		this.prefix = prefix;
+		this.storageClient = storageClient;
+	}
+	/**
+	 * 上传到fastdfs
+	 * @param content
+	 * @return
+	 */
 	public String uploadToFastDFS(String content){
 		String arr [] = content.split(";base64,");
 		//图片类型
 		String imgType = arr[0].split("/")[1];
 		//编好码的图片
 		String byteStr = arr[1].split("\"")[0];
-		byte [] buff = Base64.decodeBase64(byteStr);
+		byte [] buff = Base64.decodeBase64(byteStr);//解码base64位编码
         ByteArrayInputStream stream = new ByteArrayInputStream(buff);
         StorePath storePath = storageClient.uploadFile(stream,buff.length, imgType,null);
         return getResAccessUrl(storePath);
 	}
-	 // 封装图片完整URL地址
+	//封装图片完整URL地址
     private String getResAccessUrl(StorePath storePath) {
-        String fileUrl =  "http://192.168.241.134:8888/" + storePath.getFullPath();
+        String fileUrl =  prefix+"@http://192.168.241.134:8888/" + storePath.getFullPath();
         return fileUrl;
     }
 	
@@ -67,5 +96,10 @@ public class ImageUtil {
 			}
 		}
 		return 1;
+	}
+	
+	@Override
+	public String call() throws Exception {		
+		return uploadToFastDFS(content);
 	}
 }

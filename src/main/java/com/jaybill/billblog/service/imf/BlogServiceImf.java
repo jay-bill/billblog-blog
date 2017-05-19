@@ -1,13 +1,18 @@
 package com.jaybill.billblog.service.imf;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,16 +31,23 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 @Service
-public class BlogServiceImf implements BlogService {
+public class BlogServiceImf implements BlogService{
 
-	@Autowired(required=false)
-	private ImageUtil imUtil;
+	@Autowired
+	ImageUtil autoImgUtil;
 	@Autowired
 	private BlogHtmlStringUtil blogUtil;
 	@Autowired
 	BlogMapper blogMapper;
 	@Autowired
 	Configuration config;
+	//线程池
+	ExecutorService exe = null;
+	CompletionService<String> cps = null;
+	public BlogServiceImf(){
+		exe =  Executors.newCachedThreadPool();
+		cps = new ExecutorCompletionService<String>(exe);
+	}
 		
 	@Override
 	public List<Blog> getRandomBlogs(int sum) {
@@ -65,21 +77,48 @@ public class BlogServiceImf implements BlogService {
 		blogMapper.insertOneBlog(blog);
 	}
 
+	/**
+	 * 提取博客里面的图片，并开启多线程上传到fastdfs；
+	 * 然后获得返回的路径集合；因为返回的路径顺序是随机的，为了正确替换blog里面的图片编码串，
+	 * 需要为ImgUtil返回的字符串加上递增消息头，再排序。
+	 * 这样就可以对应于博客的图片位置了。
+	 */
 	@Override
 	public String parseBlog(String content) {
 		//获取博客里面的图片
 		List<String> foundTags = blogUtil.parseContent(content, "<img>");
-		Iterator<String> it = foundTags.iterator();
-		while(it.hasNext()){
-			String img = it.next();
-			String storePath = imUtil.uploadToFastDFS(img);
-			String newImg = "<img src='"+storePath+"'/>";
-			content = blogUtil.replaceTagVal(content, img, newImg);
+		//存放随机返回的路径结果
+		List<String> resPath = new ArrayList<String>();
+		System.out.println(foundTags.size());
+		for(int i=0;i<foundTags.size();i++){
+			String img = foundTags.get(i);
+			ImageUtil imUtil = new ImageUtil(img,i+"",autoImgUtil.getStorageClient());
+			cps.submit(imUtil);//提交线程任务到线程池			
+		}		
+		//等待线程执行完毕，记录返回的路径
+		for(int i=0;i<foundTags.size();i++){			
+			try {
+				Future<String> test = cps.take();
+				System.out.println(test);
+				String storePath = test.get();
+				resPath.add(storePath);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}		
+		}
+		Collections.sort(resPath);//字典顺序排序
+		System.out.println(resPath.size()+"要炸");
+		for(int i=0;i<resPath.size();i++){
+			String tmp = resPath.get(i).split("@")[1];
+			blogUtil.replaceTagVal(content, foundTags.get(i), tmp);
 		}
 		//返回图片解码后的博客
 		return content;
 	}
-
+	
+	
 	/**
 	 * 页面静态化
 	 */
