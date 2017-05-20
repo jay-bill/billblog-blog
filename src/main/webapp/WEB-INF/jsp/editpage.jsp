@@ -1,4 +1,7 @@
-﻿<!Doctype html>
+﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!Doctype html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -23,9 +26,11 @@
 <div id="customized-buttonpane" class="editor" onmousedown="show_element(event)" style="clear:both">
 	
 </div>
-<form id="submitForm" action="blogcontroller/submitBlog" method="post" style="display:none;">
+<form id="submitForm" action="/submitBlog" method="post" style="display:none;">
 	<input id="blogTitle" type="hidden" name="blogTitle">
 	<input id="blogContent" type="hidden" name="blogContent">
+	 <input type="hidden" name="${_csrf.parameterName }" 
+			                        value="${_csrf.token }">
 </form>
 <button onclick="submit()" style="margin-left:25px;">提交</button>
 </body>

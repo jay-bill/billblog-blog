@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-
-    <head>
-
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE>
+<html>
+<head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +23,7 @@
         <![endif]-->
 
         <!-- Favicon and touch icons -->
-        <link rel="shortcut icon" href="assets-login/ico/favicon.png">
+        <link rel="shortcut icon" href="${request.contextPath}/assets-login/ico/favicon.png">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets-login/ico/apple-touch-icon-144-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets-login/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets-login/ico/apple-touch-icon-72-precomposed.png">
@@ -61,7 +61,7 @@
                         		</div>
                             </div>
                             <div class="form-bottom">
-			                    <form role="form" action="/signin" method="post" class="login-form">
+			                    <form role="form" action="/login" method="post" class="login-form">
 			                    	<div class="form-group">
 			                    		<label class="sr-only" for="form-username">Username</label>
 			                        	<input type="text" name="userAccount" placeholder="账号" class="form-username form-control" id="form-username">
@@ -70,6 +70,8 @@
 			                        	<label class="sr-only" for="form-password">Password</label>
 			                        	<input type="password" name="userPassword" placeholder="密码" class="form-password form-control" id="form-password">
 			                        </div>
+			                        <input type="hidden" name="${_csrf.parameterName }" 
+			                        value="${_csrf.token }">
 			                        <button type="submit" class="btn">Sign in!</button>
 			                    </form>
 		                    </div>
@@ -108,5 +110,4 @@
         <![endif]-->
 
     </body>
-
 </html>

@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ import freemarker.template.TemplateExceptionHandler;
  *
  */
 @Controller
-@RequestMapping({"/","blogcontroller"})
+@RequestMapping({"/"})
 public class BlogController {
 	
 	@Autowired
@@ -107,58 +108,15 @@ public class BlogController {
 		//共享到session
 		request.getSession().setAttribute("tmp_blog", newBlog);
 		System.out.println(newBlog.getBlogHref());
-		if(newBlog.getBlogHref()!=null){
-			return "redirect:"+newBlog.getBlogHref();
-		}
-		return "redirect:showOneBlog?blogId=-1";
-	}
+		return "redirect:"+newBlog.getBlogHref();
+	}	
 	
 	/**
-	 * 阅读博客全文
-	 * @param blogId
-	 * @param map
-	 * @param request
+	 * 打开编辑页面
 	 * @return
-	 * @throws IOException 
 	 */
-	@RequestMapping(value="showOneBlog")
-	public String showOneBlog(long blogId,Map<String,Object> map
-			,HttpServletRequest request){
-		Object obj = request.getSession().getAttribute("tmp_blog");
-		Blog blog = null;
-		if(obj!=null){
-			blog = (Blog)obj;		
-		}else{
-			blog = blogService.getOneBlog(blogId);
-		}
-		map.put("oneblog", blog);
-		//静态化
-		try {
-			blogService.staticBlog(map,request);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		//除移
-		request.getSession().removeAttribute("tmp_blog");
-		//获取博客作者的信息
-		long userId = blog.getUserId();
-		//rpc
-		try{
-			map.put("user_info", common.getUserBaseInfoById(userId));
-			map.put("all_info",common.getUserInfo(userId));
-			map.put("fans_sum", common.getFansSum(userId));
-		}catch(Exception e){
-			e.printStackTrace();
-		}		
-		return "oneblog";
-	}
-	
-	@RequestMapping(value="signin",method=RequestMethod.POST)
-	public String login(String userAccount,String userPassword){		
-		User u = login.signIn(userAccount,userPassword);
-		if(u!=null)
-			return "redirect:showAllBlogs";
-		else
-			return "redirect:/login.html";
+	@GetMapping("/writeBlog")
+	public String editBlog(){
+		return "editpage";
 	}
 }

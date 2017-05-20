@@ -12,4 +12,6 @@ public interface LoginService {
 	User login(User user);
 	
 	User signIn(String account,String pword);
+	
+	User selectByAccount(String account);
 }

@@ -25,6 +25,16 @@ public class User implements Serializable{
     
     private byte userLevel;  //账号等级，默认0级
     
+    private String userRole;
+    
+    
+	public String getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
 
 	public byte getUserLevel() {
 		return userLevel;

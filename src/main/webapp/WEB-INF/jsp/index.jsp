@@ -25,7 +25,7 @@
     <li><a href="#">随便看看</a></li>
     <li><a href="#">分享专区</a></li>
     <li><a href="#">关于我们</a></li>       
-    <li><a href="#">联系我们</a></li>
+    <li><a href="/writeBlog">写博客</a></li>
     <li><a href="#">登录</a></li>
    </ul>
  </nav>
