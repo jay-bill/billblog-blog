@@ -15,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.jaybill.billblog.config.Url;
 import com.jaybill.billblog.pojo.Blog;
 import com.jaybill.billblog.pojo.User;
@@ -65,7 +68,7 @@ public class BlogController {
 			e.printStackTrace();
 		}
 		map.put("user_sum", userSum);
-		map.put("blog_list", list);
+		map.put("blog_list", list);		
 		return "index";
 	}
 	
@@ -120,5 +123,18 @@ public class BlogController {
 	@GetMapping("/writeBlog")
 	public String editBlog(){
 		return "editpage";
+	}
+	
+	@GetMapping("/test")
+	@ResponseBody
+	public void test(HttpServletRequest request){
+		SecurityContextImpl securityContextImpl = (SecurityContextImpl) request  
+				 .getSession().getAttribute("SPRING_SECURITY_CONTEXT");  
+		// 登录名  
+		System.out.println("Username:"  
+		 + securityContextImpl.getAuthentication().getName());  
+		// 登录密码，未加密的  
+		System.out.println("Credentials:"  
+		 + securityContextImpl.getAuthentication().getCredentials());
 	}
 }

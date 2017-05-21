@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.jaybill.billblog.dao.BlogMapper;
@@ -42,6 +43,9 @@ public class BlogServiceImf implements BlogService{
 	Configuration config;
 	@Autowired
 	FileUtil fileUtil;
+	@Autowired
+	StringRedisTemplate redisTemplate;
+	
 	//线程池
 	ExecutorService exe = null;
 	CompletionService<String> cps = null;
